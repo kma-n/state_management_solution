@@ -18,7 +18,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     api = Provider.of<ApiProvider>(context, listen: false);
-    final List<Items> _favList = context.watch<ApiProvider>().getCart;
+    final List<String> _favList = context.watch<ApiProvider>().getCart;
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(
-              Icons.shop,
+              Icons.shopping_cart,
               color: Colors.white,
             ),
             onPressed: () {
@@ -42,7 +43,8 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder(
         future: api?.fetchList(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done ||
+              snapshot.connectionState == ConnectionState.waiting) {
             items = snapshot.data;
             return ListView.builder(
               padding: const EdgeInsets.all(8),
@@ -51,13 +53,22 @@ class _HomePageState extends State<HomePage> {
                 return ListTile(
                   trailing: IconButton(
                       onPressed: () {
-                        if (!_favList.contains(items[index])) {
-                          context.read<ApiProvider>().addtoCart(items[index]);
-                        } else if (_favList.contains(items[index])) {
-                          context.read<ApiProvider>().delCart(items[index]);
+                        if (!_favList.contains(items[index].title)) {
+                          context
+                              .read<ApiProvider>()
+                              .addtoCart(items[index].title.toString());
+                        } else if (_favList.contains(items[index].title)) {
+                          context
+                              .read<ApiProvider>()
+                              .delCart(items[index].title.toString());
                         }
                       },
-                      icon: const Icon(Icons.check)),
+                      icon: Icon(
+                        Icons.check,
+                        color: (_favList.contains(items[index].title))
+                            ? Colors.green
+                            : Colors.blueGrey,
+                      )),
                   title: Text(
                     items[index].title.toString(),
                   ),

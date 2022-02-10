@@ -4,10 +4,12 @@ import 'package:state_management_provider/models/items_model.dart';
 import 'dart:convert' as convert;
 
 class ApiProvider with ChangeNotifier {
-  final _baseUrl = "https://fakestoreapi.com/products";
   List<Items> items = [];
+
+  final _baseUrl = "https://fakestoreapi.com/products";
+  final List<String> _favList = [];
+
   Future<List<Items>> fetchList() async {
-    List<Items> items = [];
     List data;
     final response = await http.get(Uri.parse(_baseUrl));
     if (response.statusCode == 200) {
@@ -21,15 +23,14 @@ class ApiProvider with ChangeNotifier {
 
   List<Items> get getItems => items;
 
-  final List<Items> _favList = [];
-  List<Items> get getCart => _favList;
+  List<String> get getCart => _favList;
 
-  void addtoCart(Items item) {
+  void addtoCart(String item) {
     _favList.add(item);
     notifyListeners();
   }
 
-  void delCart(Items item) {
+  void delCart(String item) {
     _favList.remove(item);
     notifyListeners();
   }

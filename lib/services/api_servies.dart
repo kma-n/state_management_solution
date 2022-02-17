@@ -3,11 +3,10 @@ import 'package:http/http.dart' as http;
 import 'package:state_management_provider/models/items_model.dart';
 import 'dart:convert' as convert;
 
-class ApiProvider with ChangeNotifier {
+class ApiProvider {
   List<Items> items = [];
 
   final _baseUrl = "https://fakestoreapi.com/products";
-  final List<String> _favList = [];
 
   Future<List<Items>> fetchList() async {
     List data;
@@ -19,19 +18,5 @@ class ApiProvider with ChangeNotifier {
     } else {
       throw Exception('Error');
     }
-  }
-
-  List<Items> get getItems => items;
-
-  List<String> get getCart => _favList;
-
-  void addtoCart(String item) {
-    _favList.add(item);
-    notifyListeners();
-  }
-
-  void delCart(String item) {
-    _favList.remove(item);
-    notifyListeners();
   }
 }

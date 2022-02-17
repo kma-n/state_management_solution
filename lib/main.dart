@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:state_management_provider/provider/items_provider.dart';
 import 'package:state_management_provider/services/api_servies.dart';
 import 'package:state_management_provider/views/homepage_view.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider<ApiProvider>(
+  runApp(ChangeNotifierProvider<ItemProvider>(
     child: const MyApp(),
-    create: (_) => ApiProvider(), // Create a new ChangeNotifier object
+    create: (_) => ItemProvider(), // Create a new ChangeNotifier object
   ));
 }
 

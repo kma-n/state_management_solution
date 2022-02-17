@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:state_management_provider/models/items_model.dart';
-import 'package:state_management_provider/services/api_servies.dart';
+import 'package:state_management_provider/provider/items_provider.dart';
 import 'package:state_management_provider/views/cart_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,13 +12,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ApiProvider? api;
+  ItemProvider? api;
+  List<Items> item = [];
   List<Items> items = [];
 
   @override
   Widget build(BuildContext context) {
-    api = Provider.of<ApiProvider>(context, listen: false);
-    final List<String> _favList = context.watch<ApiProvider>().getCart;
+    api = Provider.of<ItemProvider>(context, listen: false);
+
+    final List<String> _favList = context.watch<ItemProvider>().getCart;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,11 +57,11 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         if (!_favList.contains(items[index].title)) {
                           context
-                              .read<ApiProvider>()
+                              .read<ItemProvider>()
                               .addtoCart(items[index].title.toString());
                         } else if (_favList.contains(items[index].title)) {
                           context
-                              .read<ApiProvider>()
+                              .read<ItemProvider>()
                               .delCart(items[index].title.toString());
                         }
                       },
